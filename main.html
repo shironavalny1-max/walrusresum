@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Алексей Макаров | Security Card</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-body: #050505;
+            --card-bg: #121212;
+            --text-main: #e0e0e0;
+            --text-muted: #858585;
+            --accent: #3b82f6; /* Профессиональный синий */
+            --accent-glow: rgba(59, 130, 246, 0.3);
+            --success: #10b981;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+        }
+
+        /* --- Сама карточка --- */
+        .card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 380px; /* Размер мобильного экрана */
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px #222;
+            position: relative;
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        /* Верхняя полоска "Status" */
+        .status-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            border: 1px solid #222;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        /* Аватар */
+        .avatar {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, #222, var(--accent));
+            position: relative;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--card-bg);
+            background-color: #000;
+        }
+
+        /* Имя и должность */
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 0 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .role {
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* Опыт (честный блок) */
+        .exp-box {
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 25px;
+        }
+
+        .exp-box p {
+            margin: 0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #d1d5db;
+        }
+
+        .exp-highlight {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Стек навыков (Теги) */
+        .skills-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #555;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #bbb;
+            transition: 0.2s;
+        }
+
+        .tag:hover {
+            border-color: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* Кнопки действий */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            background: #1a1a1a;
+            color: var(--text-main);
+            border: 1px solid #333;
+        }
+
+        .btn-secondary:hover {
+            background: #222;
+            border-color: #555;
+        }
+
+        /* Декор на фоне */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            opacity: 0.1;
+            animation: scan 3s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="scan-line"></div>
+
+        <div class="status-bar">
+            <span class="status-dot"></span>
+            Open to projects
+        </div>
+
+        <div class="avatar">
+            <img src="https://ui-avatars.com/api/?name=AM&background=000&color=fff" alt="Алексей Макаров">
+        </div>
+
+        <h1>Алексей Макаров</h1>
+        <span class="role">&lt;Junior Security Auditor /&gt;</span>
+
+        <div class="exp-box">
+            <p>
+                <span class="exp-highlight">1 год в Cybersecurity.</span> 
+                Фокусируюсь на качестве, а не скорости. Глубоко понимаю теорию и владею стеком инструментов для аудита.
+            </p>
+        </div>
+
+        <div class="skills-title">Active Stack</div>
+        <div class="tags">
+            <span class="tag" style="border-color: var(--accent);">Burp Suite</span>
+            <span class="tag" style="border-color: var(--accent);">Acunetix</span>
+            <span class="tag">Wireshark</span>
+            <span class="tag">Ghidra</span>
+            
+            <span class="tag">OSI Model</span>
+            <span class="tag">TCP/IP</span>
+            <span class="tag">SQL Injection</span>
+            <span class="tag">Linux/Bash</span>
+            
+            <span class="tag">OWASP Top 10</span>
+            <span class="tag">Threat Analysis</span>
+            <span class="tag">NGFW</span>
+        </div>
+
+        <div class="actions">
+            <a href="https://t.me/USERNAME" class="btn btn-primary">
+                Написать в Telegram
+            </a>
+            <a href="mailto:email@example.com" class="btn btn-secondary">
+                Отправить Email
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
